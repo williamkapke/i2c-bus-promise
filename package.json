@@ -1,0 +1,21 @@
+{
+  "name": "i2c-bus-promise",
+  "version": "1.0.0",
+  "description": "A promise wrapper around the i2c-bus module",
+  "main": "i2c-bus-promise.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/williamkapke/i2c-bus-promise"
+  },
+  "bugs": {
+    "url": "https://github.com/fivdi/i2c-bus/issues"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "William Kapke",
+  "license": "MIT",
+  "dependencies": {
+    "i2c-bus": "^4"
+  }
+}
