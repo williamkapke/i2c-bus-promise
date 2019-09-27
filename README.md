@@ -1,4 +1,10 @@
+# **ATTENTION!**
+[i2c-bus](https://www.npmjs.com/package/i2c-bus) > 5.0.0 [now has a promise API included](https://github.com/fivdi/i2c-bus#september-2019-i2c-bus-v500-released-with-the-following-changes).
+<br>
+<br>
+
 # i2c-bus-promise
+
 Nothing complicated here. Just a promise wrapper for [i2c-bus](https://www.npmjs.com/package/i2c-bus).
 
 [i2c-bus](https://www.npmjs.com/package/i2c-bus) dependency defined as `^4` to allow wide compatibility with existing version you may have installed already.

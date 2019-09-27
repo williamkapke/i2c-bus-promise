@@ -7,7 +7,11 @@ const busWrapper = (bus) => {
   return {
     wrapped: true,
     _bus: bus,
-    close: () => new Promise(resolve => bus.close(resolve)),
+    close: () => new Promise((resolve, reject) =>
+      bus.close(err =>
+        err ? reject(err) : resolve()
+      )
+    ),
 
     i2cWrite: (addr, length, buffer) => new Promise((resolve, reject) => {
       bus.i2cWrite(addr, length, buffer, (err, bytesWritten, buffer) =>
