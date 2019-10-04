@@ -1,5 +1,8 @@
 # **ATTENTION!**
-[i2c-bus](https://www.npmjs.com/package/i2c-bus) > 5.0.0 [now has a promise API included](https://github.com/fivdi/i2c-bus#september-2019-i2c-bus-v500-released-with-the-following-changes).
+[i2c-bus](https://www.npmjs.com/package/i2c-bus) > 5.0.0
+[now has a promise API included](https://github.com/fivdi/i2c-bus#september-2019-i2c-bus-v500-released-with-the-following-changes).
+If you're unable to upgrade, you can use this module - this module serves
+as a polyfill.
 <br>
 <br>
 
@@ -18,7 +21,7 @@ npm install i2c-bus-promise
 ```js
 const i2c = require('i2c-bus-promise');
 
-i2c.open(1).then(async bus => {
+i2c.openPromisified(1).then(async bus => {
   console.log(await bus.scan())
 })
 ```

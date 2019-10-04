@@ -7,6 +7,7 @@ const busWrapper = (bus) => {
   return {
     wrapped: true,
     _bus: bus,
+    bus: () => bus,
     close: () => new Promise((resolve, reject) =>
       bus.close(err =>
         err ? reject(err) : resolve()
@@ -15,13 +16,13 @@ const busWrapper = (bus) => {
 
     i2cWrite: (addr, length, buffer) => new Promise((resolve, reject) => {
       bus.i2cWrite(addr, length, buffer, (err, bytesWritten, buffer) =>
-        (err) ? reject(err) : resolve(buffer)
+        (err) ? reject(err) : resolve({ bytesWritten, buffer })
       )
     }),
 
     i2cRead: (addr, length, buffer = Buffer.alloc(length)) =>  new Promise((resolve, reject) => {
       bus.i2cRead(addr, length, buffer, (err, bytesRead, buffer) =>
-        (err) ? reject(err) : resolve(buffer)
+        (err) ? reject(err) : resolve({ bytesRead, buffer })
       )
     }),
 
@@ -53,8 +54,8 @@ const busWrapper = (bus) => {
     )),
 
     readI2cBlock: (addr, cmd, length, buffer = Buffer.alloc(length)) => new Promise((resolve, reject) =>
-      bus.readI2cBlock(addr, cmd, length, buffer, (err, bytesRead, buff) =>
-        err ? reject(err) : resolve(buff)
+      bus.readI2cBlock(addr, cmd, length, buffer, (err, bytesRead, buffer) =>
+        err ? reject(err) : resolve({ bytesRead, buffer })
       )
     ),
 
@@ -80,7 +81,7 @@ const busWrapper = (bus) => {
 
     writeI2cBlock: (addr, cmd, buffer) => new Promise((resolve, reject) =>
       bus.writeI2cBlock(addr, cmd, buffer.length, buffer, (err, bytesWritten, buffer) =>
-        err ? reject(err) : resolve(buffer)
+        err ? reject(err) : resolve({ bytesWritten, buffer })
       )
     )
   }
@@ -89,11 +90,23 @@ const busWrapper = (bus) => {
 
 const i2c = {}
 
-i2c.open = (...args) => new Promise((resolve, reject) => {
+i2c.openPromisified = (...args) => new Promise((resolve, reject) => {
   const bus = require('i2c-bus').open(...args, (err) =>
     (err) ? reject(err) : resolve(busWrapper(bus))
   )
 })
+i2c.open = (...args) => {
+  const bus = require('i2c-bus').open(...args)
+  bus._promisifiedBus = bus._promisifiedBus || busWrapper(bus)
+  bus.promisifiedBus = () => bus._promisifiedBus
+  return bus
+}
+i2c.openSync = (...args) => {
+  const bus = require('i2c-bus').openSync(...args)
+  bus._promisifiedBus = bus._promisifiedBus || busWrapper(bus)
+  bus.promisifiedBus = () => bus._promisifiedBus
+  return bus
+}
 
 // allow BYO[i2c-bus]...
 i2c.wrap = busWrapper;
